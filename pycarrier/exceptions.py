@@ -9,7 +9,7 @@ class UnknownError(BaseCorreioException):
 
 class OrderNotDispatched(BaseCorreioException):
     def __str__(self) -> str:
-        return f'Order not dispatched'
+        return 'Order not dispatched'
 
 
 class InvalidTrackingCode(BaseCorreioException):
