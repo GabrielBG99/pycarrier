@@ -4,10 +4,11 @@ import asyncio
 from enum import Enum
 import typer
 from tabulate import tabulate
-from carriers.base import BaseCarreier
-from carriers.correios import Correios
-from carriers.jadlog import Jadlog
-from event import Event
+from .carriers.base import BaseCarreier
+from .carriers.correios import Correios
+from .carriers.jadlog import Jadlog
+from .exceptions import BaseCorreioException
+from .event import Event
 
 
 class Carrier(str, Enum):
@@ -15,13 +16,17 @@ class Carrier(str, Enum):
     JADLOG = 'jadlog'
 
 
-def main(carrier: Carrier, tracking_code: str) -> None:
+def track(carrier: Carrier, tracking_code: str) -> None:
     carrier: BaseCarreier = {
         Carrier.CORREIOS: Correios,
         Carrier.JADLOG: Jadlog,
     }[carrier]()
 
-    events: list[Event] = asyncio.run(carrier.track(code=tracking_code))
+    try:
+        events: list[Event] = asyncio.run(carrier.track(code=tracking_code))
+    except BaseCorreioException as e:
+        typer.echo(f'Error: {str(e)}')
+        raise typer.Exit(1) from e
 
     data = [
         {
@@ -34,5 +39,9 @@ def main(carrier: Carrier, tracking_code: str) -> None:
     typer.echo(table)
 
 
+def main():
+    typer.run(track)
+
+
 if __name__ == '__main__':
-    typer.run(main)
+    main()

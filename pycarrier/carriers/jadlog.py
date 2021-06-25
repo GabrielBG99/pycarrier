@@ -2,9 +2,9 @@ from datetime import datetime
 import httpx
 from bs4 import BeautifulSoup
 from bs4.element import Tag
-from event import Event
-from exceptions import NoTrackingData, InvalidTrackingCode
 from .base import BaseCarreier
+from ..event import Event
+from ..exceptions import NoTrackingData, InvalidTrackingCode
 
 
 class Jadlog(BaseCarreier):

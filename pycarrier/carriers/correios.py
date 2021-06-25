@@ -3,13 +3,13 @@ from datetime import datetime
 import httpx
 from bs4 import BeautifulSoup
 from bs4.element import Tag
-from event import Event
-from exceptions import InvalidTrackingCode, OrderNotDispatched, UnknownError
 from .base import BaseCarreier
+from ..event import Event
+from ..exceptions import InvalidTrackingCode, OrderNotDispatched, UnknownError
 
 
 class Correios(BaseCarreier):
-    URL = 'https://www2.correios.com.br/sistemas/rastreamento/ctrl/ctrlRastreamento.cfm?' # noqa
+    URL = 'https://www2.correios.com.br/sistemas/rastreamento/ctrl/ctrlRastreamento.cfm?'
     TRACKING_CODE_LENGTH = 13
 
     async def track(self, code: str) -> list[Event]:
